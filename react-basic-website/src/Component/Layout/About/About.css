@@ -1,0 +1,22 @@
+.aboutContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.about ul {
+  display: flex;
+  justify-content: flex-start;
+  list-style: none;
+  width: 30%;
+}
+.about ul li a {
+  display: block;
+  text-align: center;
+  margin: 0 10px;
+}
+@media (max-width: 767px) {
+  .content {
+    justify-content: center;
+  }
+}

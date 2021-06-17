@@ -1,0 +1,274 @@
+import React, { useState } from "react";
+import "./MStateForm.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const MStateForm = () => {
+  const [formData, setFormData] = useState({
+    code: "",
+    Name: "",
+  });
+  const [data, setData] = useState([]);
+  const [errors, setError] = useState({
+    formDatacode: "",
+    formDataName: "",
+  });
+  const [updateIndex, setUpdateIndex] = useState();
+  const [buttonName, setButtonName] = useState("save");
+
+  const CheckData = () => {
+    if (
+      formData.code.trim().length >= 3 &&
+      formData.code.trim().length <= 10 &&
+      formData.Name.trim().length >= 4 &&
+      formData.Name.trim().length <= 100
+    ) {
+      return true;
+    } else if (
+      formData.code.trim().length >= 3 &&
+      formData.code.trim().length <= 10
+    ) {
+      setError({ formDataName: "*please enter state Name" });
+    } else if (
+      formData.Name.trim().length >= 4 &&
+      formData.Name.trim().length <= 100
+    ) {
+      setError({ formDatacode: "*please enter state Code" });
+    } else {
+      setError({
+        formDataName: "*please enter state Name",
+        formDatacode: "*please enter state Code",
+      });
+    }
+  };
+  const handleOnChange = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    let error = errors;
+
+    switch (name) {
+      case "code": {
+        error.formDatacode =
+          value.trim().length <= 2 || value.trim().length >= 10
+            ? " * State Code Must be 2 to 10 char"
+            : "";
+        break;
+      }
+      case "Name": {
+        error.formDataName =
+          value.trim().length <= 3 || value.trim().length >= 100
+            ? "* State Name Must 3 to 100 Char."
+            : "";
+        break;
+      }
+      default:
+        break;
+    }
+    setFormData((prevUser) => ({
+      ...prevUser,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleUpdatebtn = (index, itm) => {
+    setFormData({ ...itm });
+    setUpdateIndex(index);
+    setButtonName("Update");
+  };
+  const handleDeletebtn = (index) => {
+    const updatedItems = [...data];
+    updatedItems.splice(index, 1);
+    setData(updatedItems);
+    toast.error("Your Data Deleted", {
+      position: "bottom-right",
+    });
+  };
+  const handleSaveBtn = (e) => {
+    e.preventDefault();
+    if (CheckData()) {
+      let upDateData = [...data];
+      let msg = "Save";
+      if (updateIndex > -1) {
+        upDateData[updateIndex] = { ...formData };
+        msg = "updated";
+      } else {
+        upDateData = [...upDateData, { ...formData }];
+      }
+      setData(upDateData);
+      handleResetBtn(e);
+      toast.success(`Your Data are Successfully ${msg}`, {
+        position: "bottom-right",
+      });
+    }
+  };
+  const handleResetBtn = (e) => {
+    e.preventDefault();
+    setError({ formDataName: "", formDatacode: "" });
+    setFormData({ code: "", Name: "" });
+    setUpdateIndex(-1);
+    setFormData({ code: "", Name: "" });
+    setButtonName("save");
+  };
+
+  return (
+    <div className="container py-5 pageStyle">
+      <div className="row ">
+        <div className="col-sm-6">
+          <div className="card card-outline-secondary">
+            <div className="card-header">
+              <h3 className="mb-0">State Information</h3>
+            </div>
+            <div className="card-body">
+              <form className="form">
+                <div className="form-group row">
+                  <label className="col-lg-3 col-form-label form-control-label">
+                    State Code <span className="red">*</span>
+                  </label>
+                  <div className="col-lg-9">
+                    <input
+                      className={
+                        errors.formDatacode.length === 0
+                          ? "form-control "
+                          : "form-control input"
+                      }
+                      type="text"
+                      value={formData.code}
+                      onChange={handleOnChange}
+                      placeholder=" Enter State Code"
+                      name="code"
+                    />
+                    <p className="cardError">
+                      <span className="red">{errors.formDatacode}</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="form-group row ">
+                  <label className="col-lg-3 col-form-label form-control-label mt-4">
+                    State Name <span className="red">*</span>
+                  </label>
+                  <div className="col-lg-9 mt-4">
+                    <input
+                      className={
+                        errors.formDataName.length === 0
+                          ? "form-control "
+                          : "form-control input"
+                      }
+                      type="text"
+                      value={formData.Name}
+                      onChange={handleOnChange}
+                      placeholder=" Enter State Name"
+                      name="Name"
+                    />
+                    <p className="cardError">
+                      <span className="red"> {errors.formDataName}</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="form-group row">
+                  <label className="col-lg-3 col-form-label form-control-label"></label>
+                  <div className="col-lg-9 ">
+                    <button
+                      type="submit"
+                      className="btn btn-outline-info mr-1"
+                      onClick={handleSaveBtn}
+                    >
+                      {buttonName}
+                    </button>
+                    <button
+                      type="reset"
+                      className="btn btn-outline-secondary"
+                      onClick={handleResetBtn}
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div className="col-sm-6 ">
+          {data.map((d, index) => {
+            return (
+              <div className="row showItems" key={index}>
+                <div className="col-sm-2 ">
+                  <h5>{d.code}</h5>
+                </div>
+                <div className="col-sm-8 items">
+                  <h5>{d.Name}</h5>
+                </div>
+                <div className="col-sm-2 ">
+                  <i
+                    className="far fa-trash-alt trashBtn"
+                    title="delete itme"
+                    onClick={() => handleDeletebtn(index, d)}
+                  ></i>
+                  <i
+                    className="far fa-edit trashUpdate"
+                    title="update item"
+                    onClick={() => handleUpdatebtn(index, d)}
+                  ></i>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <ToastContainer />
+    </div>
+  );
+};
+
+export default MStateForm;
+
+
+
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+.pageStyle {
+  margin: 10% 0%;
+}
+
+.showItems {
+  padding: 10px;
+  border: 1px solid #0093e9;
+  box-shadow: 0 10px 10px -5px;
+  margin-top: 20px;
+  box-sizing: border-box;
+}
+
+.items {
+  display: flex;
+  padding: 0 5px;
+  justify-content: space-around;
+}
+.trashBtn {
+  border-color: red;
+  cursor: pointer;
+  padding: 5px;
+}
+.trashBtn:hover {
+  color: red;
+}
+.trashUpdate {
+  border-color: red;
+  cursor: pointer;
+  padding: 5px;
+}
+.trashUpdate:hover {
+  color: #0093e9;
+}
+.red {
+  color: red;
+}
+.cardError {
+  margin: 0px;
+  height: 10px;
+}
+.input {
+  border: 1px solid red !important;
+}
+

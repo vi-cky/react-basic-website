@@ -1,0 +1,62 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+.pageStyle {
+  margin: 10% 0%;
+}
+
+.showItems {
+  padding: 10px;
+  border: 1px solid #0093e9;
+  box-shadow: 0 10px 10px -5px;
+  margin-top: 20px;
+  box-sizing: border-box;
+}
+
+.items {
+  display: flex;
+  padding: 0 5px;
+  justify-content: space-around;
+}
+.trashBtn {
+  border-color: red;
+  cursor: pointer;
+  padding: 5px;
+}
+.trashBtn:hover {
+  color: red;
+}
+.trashUpdate {
+  border-color: red;
+  cursor: pointer;
+  padding: 5px;
+}
+.trashUpdate:hover {
+  color: #0093e9;
+}
+.red {
+  color: red;
+}
+.cardError {
+  margin: 0px;
+  height: 10px;
+}
+.input {
+  border: 1px solid red !important;
+}
+
+.display-design {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: 3px 2px 5px #aaaaaa;
+  box-sizing: border-box;
+}
+.btn-position {
+  display: flex;
+  justify-content: flex-end;
+}
+.customClass {
+  padding: 3px !important;
+}
