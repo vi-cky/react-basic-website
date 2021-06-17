@@ -75,15 +75,28 @@ const CityForm = () => {
       setError({
         formDatacode: "*please enter City Code",
       });
+    } else if (
+      city.cityCode.trim().length >= 3 &&
+      city.cityCode.trim().length <= 10 &&
+      city.cityName.trim().length >= 4 &&
+      city.cityName.trim().length <= 100
+    ) {
+      setError({
+        formstateName: "*please Select State Names",
+      });
     } else {
       setError({
         formDataName: "*please enter City Name",
         formDatacode: "*please enter City Code",
-        formstateName: "* please select drop down list",
+        formstateName: "*please Select State Names",
       });
     }
   };
   const handleChangeCategory = (e) => {
+    if (e.target.value.length > 0) {
+      errors.formstateName =
+        e.target.value.length > 0 ? "" : "*please select the state Name";
+    }
     if (e.target.value === "nothing") {
       errors.formstateName = "*please select the state name";
       setCity((preData) => ({
@@ -119,6 +132,7 @@ const CityForm = () => {
             : "";
         break;
       }
+
       default:
         break;
     }
